@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -6,6 +6,8 @@
 #pragma once
 
 #include "dfa/DFAState.h"
+
+#include "absl/container/node_hash_set.h"
 
 namespace antlrcpp {
   class SingleWriteMultipleReadLock;
@@ -21,7 +23,7 @@ namespace dfa {
 
     /// From which ATN state did we create this DFA?
     atn::DecisionState *atnStartState;
-    std::unordered_set<DFAState *, DFAState::Hasher, DFAState::Comparer> states; // States are owned by this class.
+    absl::node_hash_set<DFAState *, DFAState::Hasher, DFAState::Comparer> states; // States are owned by this class.
     DFAState *s0;
     size_t decision;
 

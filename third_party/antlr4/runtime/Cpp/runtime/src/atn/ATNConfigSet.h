@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -7,6 +7,8 @@
 
 #include "support/BitSet.h"
 #include "atn/PredictionContext.h"
+
+#include "absl/container/node_hash_map.h"
 
 namespace antlr4 {
 namespace atn {
@@ -101,7 +103,7 @@ namespace atn {
 
     /// All configs but hashed by (s, i, _, pi) not including context. Wiped out
     /// when we go readonly as this set becomes a DFA state.
-    std::unordered_map<size_t, ATNConfig *> _configLookup;
+    absl::node_hash_map<size_t, ATNConfig *> _configLookup;
 
     void InitializeInstanceFields();
   };

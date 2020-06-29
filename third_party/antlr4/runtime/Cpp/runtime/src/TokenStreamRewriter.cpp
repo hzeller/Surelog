@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -9,6 +9,8 @@
 #include "TokenStream.h"
 
 #include "TokenStreamRewriter.h"
+
+#include "absl/container/node_hash_map.h"
 
 using namespace antlr4;
 
@@ -275,7 +277,7 @@ std::string TokenStreamRewriter::getText(const std::string &programName, const I
   std::string buf;
 
   // First, optimize instruction stream
-  std::unordered_map<size_t, TokenStreamRewriter::RewriteOperation*> indexToOp = reduceToSingleOperationPerIndex(rewrites);
+  absl::node_hash_map<size_t, TokenStreamRewriter::RewriteOperation*> indexToOp = reduceToSingleOperationPerIndex(rewrites);
 
   // Walk buffer, executing instructions and emitting tokens
   size_t i = start;
@@ -310,7 +312,7 @@ std::string TokenStreamRewriter::getText(const std::string &programName, const I
   return buf;
 }
 
-std::unordered_map<size_t, TokenStreamRewriter::RewriteOperation*> TokenStreamRewriter::reduceToSingleOperationPerIndex(
+absl::node_hash_map<size_t, TokenStreamRewriter::RewriteOperation*> TokenStreamRewriter::reduceToSingleOperationPerIndex(
   std::vector<TokenStreamRewriter::RewriteOperation*> &rewrites) {
 
 
@@ -399,7 +401,7 @@ std::unordered_map<size_t, TokenStreamRewriter::RewriteOperation*> TokenStreamRe
     }
   }
 
-  std::unordered_map<size_t, TokenStreamRewriter::RewriteOperation*> m;
+  absl::node_hash_map<size_t, TokenStreamRewriter::RewriteOperation*> m;
   for (TokenStreamRewriter::RewriteOperation *op : rewrites) {
     if (op == nullptr) { // ignore deleted ops
       continue;
