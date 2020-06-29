@@ -31,6 +31,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "absl/container/node_hash_map.h"
+
 namespace SURELOG {
 
 typedef uint64_t SymbolId;
@@ -68,7 +70,7 @@ class SymbolTable {
  private:
   SymbolId m_idCounter;
   std::vector<std::string> m_id2SymbolMap;
-  std::unordered_map<std::string, SymbolId> m_symbol2IdMap;
+  absl::node_hash_map<std::string, SymbolId> m_symbol2IdMap;
 
   static const std::string s_badSymbol;
   static const SymbolId s_badId;

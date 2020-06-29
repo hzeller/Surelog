@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -6,6 +6,7 @@
 #pragma once
 
 #include "antlr4-common.h"
+#include "absl/container/node_hash_map.h"
 
 namespace antlr4 {
 namespace dfa {
@@ -59,7 +60,7 @@ namespace dfa {
     ///  <seealso cref="Token#EOF"/> maps to {@code edges[0]}.
     // ml: this is a sparse list, so we use a map instead of a vector.
     //     Watch out: we no longer have the -1 offset, as it isn't needed anymore.
-    std::unordered_map<size_t, DFAState *> edges;
+    absl::node_hash_map<size_t, DFAState *> edges;
 
     bool isAcceptState;
 

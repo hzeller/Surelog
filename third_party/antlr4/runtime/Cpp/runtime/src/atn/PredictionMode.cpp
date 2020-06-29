@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -10,6 +10,8 @@
 #include "SemanticContext.h"
 
 #include "PredictionMode.h"
+
+#include "absl/container/node_hash_map.h"
 
 using namespace antlr4;
 using namespace antlr4::atn;
@@ -159,7 +161,7 @@ antlrcpp::BitSet PredictionModeClass::getAlts(ATNConfigSet *configs) {
 
 
 std::vector<antlrcpp::BitSet> PredictionModeClass::getConflictingAltSubsets(ATNConfigSet *configs) {
-  std::unordered_map<ATNConfig *, antlrcpp::BitSet, AltAndContextConfigHasher, AltAndContextConfigComparer> configToAlts;
+  absl::node_hash_map<ATNConfig *, antlrcpp::BitSet, AltAndContextConfigHasher, AltAndContextConfigComparer> configToAlts;
   for (auto &config : configs->configs) {
     configToAlts[config.get()].set(config->alt);
   }

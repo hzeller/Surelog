@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -9,6 +9,9 @@
 #include "atn/ATN.h"
 #include "atn/ATNState.h"
 
+#include "absl/container/node_hash_set.h"
+#include "absl/container/node_hash_map.h"
+
 namespace antlr4 {
 namespace atn {
 
@@ -16,7 +19,7 @@ namespace atn {
   struct PredictionContextComparer;
   class PredictionContextMergeCache;
 
-  typedef std::unordered_set<Ref<PredictionContext>, PredictionContextHasher, PredictionContextComparer> PredictionContextCache;
+  typedef absl::node_hash_set<Ref<PredictionContext>, PredictionContextHasher, PredictionContextComparer> PredictionContextCache;
 
   class ANTLR4CPP_PUBLIC PredictionContext {
   public:
@@ -38,7 +41,7 @@ namespace atn {
       SingletonPredictionContextClass = 2,
       EmptyPredictionContextClass = 4
     };
-    
+
     long classtype;
 
     bool isType(ClassType type) { return (classtype & type); }
@@ -254,12 +257,11 @@ namespace atn {
     size_t count() const;
 
   private:
-    std::unordered_map<Ref<PredictionContext>,
-      std::unordered_map<Ref<PredictionContext>, Ref<PredictionContext>, PredictionContextHasher, PredictionContextComparer>,
+    absl::node_hash_map<Ref<PredictionContext>,
+                        absl::node_hash_map<Ref<PredictionContext>, Ref<PredictionContext>, PredictionContextHasher, PredictionContextComparer>,
       PredictionContextHasher, PredictionContextComparer> _data;
 
   };
 
 } // namespace atn
 } // namespace antlr4
-
