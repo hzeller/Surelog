@@ -66,7 +66,7 @@ endif(WITH_DEMO)
 if (MSVC_VERSION)
   set(MY_CXX_WARNING_FLAGS "  /W4")
 else()
-  set(MY_CXX_WARNING_FLAGS "  -Wall -pedantic -W")
+  set(MY_CXX_WARNING_FLAGS "  -Wall -W")
 endif()
 
 # Initialize CXXFLAGS.
