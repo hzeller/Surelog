@@ -1,8 +1,8 @@
 #!/bin/bash
-SURELOG=build/bin/surelog
+SURELOG=$(realpath $(dirname $0))/build/bin/surelog
 PROFILER_LIB=/usr/lib/x86_64-linux-gnu/libprofiler.so
 
-USE_PERF=0
+USE_PERF=1
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <sl-basename-somewhere-below-.>"
@@ -34,7 +34,10 @@ rm -rf slpp_all/
 if [ $USE_PERF -eq 1 ] ; then
   perf record -g $SURELOG -f $TEST.sl
   echo "In directory $(pwd)"
-  perf report -g 'graph,0.5,caller'
+  perf report -g 'graph,0.5,caller' -Mintel
+  echo "---------------------"
+  echo "$(realpath $(pwd))"
+  echo "---------------------"
 else
   time bash -c "LD_PRELOAD=$PROFILER_LIB CPUPROFILE=$CPU_PROFILE_FILE $SURELOG -f $TEST.sl"
   pprof $SURELOG $CPU_PROFILE_FILE
