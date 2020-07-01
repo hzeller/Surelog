@@ -1,5 +1,12 @@
 #!/bin/bash
 SURELOG=$(realpath $(dirname $0))/build/bin/surelog
+
+# Flamegraph viz; from https://github.com/brendangregg/FlameGraph
+FLAMEGRAPH=$(realpath $(dirname $0))/flamegraph.pl
+STACKCOLLAPSE=$(realpath $(dirname $0))/stackcollapse-perf.pl
+
+SVG_WIDTH=1900
+
 PROFILER_LIB=/usr/lib/x86_64-linux-gnu/libprofiler.so
 
 USE_PERF=1
@@ -34,9 +41,10 @@ rm -rf slpp_all/
 if [ $USE_PERF -eq 1 ] ; then
   perf record -g $SURELOG -f $TEST.sl
   echo "In directory $(pwd)"
-  perf report -g 'graph,0.5,caller' -Mintel
+  #perf report -g 'graph,0.5,caller' -Mintel
+  perf script | $STACKCOLLAPSE | $FLAMEGRAPH --colors surelog --width=$SVG_WIDTH > flamegraph.svg
   echo "---------------------"
-  echo "$(realpath $(pwd))"
+  echo "$(realpath ./flamegraph.svg)"
   echo "---------------------"
 else
   time bash -c "LD_PRELOAD=$PROFILER_LIB CPUPROFILE=$CPU_PROFILE_FILE $SURELOG -f $TEST.sl"
