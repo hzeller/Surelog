@@ -9,6 +9,8 @@ SVG_WIDTH=1900
 
 PROFILER_LIB=/usr/lib/x86_64-linux-gnu/libprofiler.so
 
+# use-perf=1: use Linux perf (http://www.brendangregg.com/perf.html)
+# use-perf=0: use pprof (https://github.com/google/pprof)
 USE_PERF=1
 
 if [ $# -ne 1 ]; then
@@ -43,10 +45,11 @@ if [ $USE_PERF -eq 1 ] ; then
   echo "In directory $(pwd)"
   #perf report -g 'graph,0.5,caller' -Mintel
   perf script | $STACKCOLLAPSE | $FLAMEGRAPH --colors surelog --width=$SVG_WIDTH > flamegraph.svg
-  echo "---------------------"
-  echo "$(realpath ./flamegraph.svg)"
-  echo "---------------------"
 else
   time bash -c "LD_PRELOAD=$PROFILER_LIB CPUPROFILE=$CPU_PROFILE_FILE $SURELOG -f $TEST.sl"
-  pprof $SURELOG $CPU_PROFILE_FILE
+  pprof -svg $SURELOG $CPU_PROFILE_FILE
 fi
+
+echo "--- Available output -------"
+ls -l $(realpath .)/*.svg
+echo "----------------------------"
