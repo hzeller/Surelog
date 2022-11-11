@@ -27,8 +27,48 @@
 
 #include <cstdint>
 #include <string>
+#include <charconv>
+#include <string_view>
+#include <ctype.h>
 
 namespace SURELOG {
+
+// These funcionts parse a number from a std::string_view into "result".
+// Returns the end of the number on success, nullptr otherwise.
+// So this can be used in a simple boolean context for success testing, but
+// as well in parsing context where advancing to the next position
+// is needed.
+
+// Parse any number type with std::from_chars
+namespace internal {
+template <typename number_type>
+const char *convert_strto_num(std::string_view s, number_type *result) {
+  while (!s.empty() && isspace(s.front())) s.remove_prefix(1);
+  if (!s.empty() && s.front() == '+') s.remove_prefix(1);
+  auto success = std::from_chars(s.data(), s.data() + s.size(), *result);
+  return (success.ec == std::errc()) ? success.ptr : nullptr;
+}
+}
+
+// Parse an integer type (int32_, int64_t, uint32_t, uint64_t)
+// Must check result: returns 'nullptr' if parse not successful.
+template <typename int_type>
+[[nodiscard]] const char *convert_strtoi(std::string_view s, int_type *result) {
+  return internal::convert_strto_num(s, result);
+}
+
+// Parse a float value
+// Must check result: returns 'nullptr' if parse not successful.
+[[nodiscard]] const char *convert_strtof(std::string_view s, float *result);
+
+// Parse a double value
+// Must check result: returns 'nullptr' if parse not successful.
+[[nodiscard]] const char *convert_strtod(std::string_view s, double *result);
+
+// Parse a long double value
+// Must check result: returns 'nullptr' if parse not successful.
+[[nodiscard]] const char *convert_strtold(std::string_view s,
+                                          long double *result);
 
 class NumUtils final {
  public:
