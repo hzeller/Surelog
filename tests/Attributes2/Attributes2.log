@@ -932,6 +932,11 @@ design: (work@foo)
     |vpiName:clk
     |vpiFullName:work@foo.clk
     |vpiNetType:1
+    |vpiAttribute:
+    \_attribute: (this_is_clock), line:9:4, endln:9:17
+      |vpiParent:
+      \_logic_net: (work@foo.clk), line:8:12, endln:8:15
+      |vpiName:this_is_clock
   |vpiPort:
   \_port: (clk), line:8:12, endln:8:15
     |vpiParent:
@@ -955,9 +960,6 @@ design: (work@foo)
       \_logic_typespec: , line:9:28, endln:9:32
     |vpiAttribute:
     \_attribute: (this_is_clock), line:9:4, endln:9:17
-      |vpiParent:
-      \_port: (clk), line:8:12, endln:8:15
-      |vpiName:this_is_clock
   |vpiRefModule:
   \_ref_module: work@bar (bar_instance_1), line:11:7, endln:11:21
     |vpiParent:
