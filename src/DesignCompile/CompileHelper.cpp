@@ -2185,6 +2185,7 @@ bool CompileHelper::compileNetDeclaration(DesignComponent* component,
       sig->setDelay(delay);
       sig->setStatic();
       sig->setTypespecId(NetType);
+      sig->attributes(attributes);
       if (isSigned) sig->setSigned();
       component->getSignals().push_back(sig);
     } else {

@@ -891,6 +891,14 @@ void UhdmWriter::writeNets(DesignComponent* mod,
         dest_net->VpiNetType(UhdmWriter::getVpiNetType(orig_net->getType()));
         dest_net->VpiParent(parent);
         dest_nets->push_back(dest_net);
+        
+        // Handle attributes (similar to writePorts)
+        if (orig_net->attributes()) {
+          dest_net->Attributes(orig_net->attributes());
+          for (auto ats : *orig_net->attributes()) {
+            ats->VpiParent(dest_net);
+          }
+        }
       }
     }
   }

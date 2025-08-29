@@ -14413,7 +14413,7 @@ array_net                                             83
 array_typespec                                      3666
 array_var                                            749
 assignment                                        119759
-attribute                                             35
+attribute                                           2915
 begin                                              86444
 bit_select                                        360187
 bit_typespec                                        2425

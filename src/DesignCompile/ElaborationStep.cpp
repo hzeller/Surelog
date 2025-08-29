@@ -2337,6 +2337,7 @@ any* ElaborationStep::makeVar_(DesignComponent* component, Signal* sig,
     obj->VpiSigned(sig->isSigned());
     obj->VpiConstantVariable(sig->isConst());
     obj->VpiIsRandomized(sig->isRand() || sig->isRandc());
+    obj->Attributes(sig->attributes());
     if (sig->isRand())
       obj->VpiRandType(vpiRand);
     else if (sig->isRandc())
